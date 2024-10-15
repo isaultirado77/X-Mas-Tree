@@ -1,4 +1,6 @@
 # X-Mas Tree Project
+from typing import Any
+
 
 class Grid:
     def __init__(self, tree_height: int):
@@ -19,6 +21,13 @@ class Grid:
             self.grid[i][j] = value
         else:
             print("Error: Enter valid row or col")
+
+    def get_value(self, i: int, j: int) -> Any:
+        if 0 <= i < self.height and 0 <= j < self.width:
+            return self.grid[i][j]
+        else:
+            print("Error: Enter valid row or col")
+            return
 
     def display(self) -> None:
         print(self)
@@ -61,13 +70,30 @@ class Tree:
                 # Put sides
                 self.grid.set_value(2 + k, mid + l + 1, '\\')
                 self.grid.set_value(2 + k, mid - l - 1, '/')
+
                 for m in range(l + 1):
                     # Put stars
                     self.grid.set_value(2 + k, mid + m, '*')
                     self.grid.set_value(2 + k, mid - m, '*')
+        # Put decorations
+        positions = self.find_decorations_positions()
+        for position in positions:
+            i, j = position
+            self.grid.set_value(i, j, 'O')
 
-    def put_decorations(self):
-        pass
+    def find_decorations_positions(self) -> list:
+        mid = self.grid.get_mid()
+        h = self.grid.height - 1
+        positions = []
+
+        for i in range(3, h):
+            num_positions = i - 2
+            first_position = mid - num_positions + 1
+            for j in range(num_positions):
+                pos = first_position + j * 2
+                positions.append((i, pos))
+
+        return positions[::self.interval]
 
     @staticmethod
     def get_tree(height: int, interval: int):
@@ -81,16 +107,27 @@ class Tree:
         self.grid.display()
 
 
-def read_height() -> int:
+def read_inputs():
     try:
-        height = int(input())
-        return height
+        inputs = str(input())
+        split_inputs = inputs.split(' ')
+        if len(split_inputs) > 2:
+            print("Error: Enter a valid inputs. ")
+            return -1
+        height = int(split_inputs[0])
+        interval = int(split_inputs[1])
+        if interval < 1:
+            print("Error: Interval must be greater or equal than 1. ")
+        return height, interval
     except ValueError:
         print("Error: Enter a number.")
         return -1
 
 
 def main():
+    height, interval = read_inputs()
+    tree = Tree.get_tree(height, interval)
+    tree.display()
     pass
 
 
