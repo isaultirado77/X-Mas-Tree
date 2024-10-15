@@ -21,8 +21,7 @@ class Grid:
             print("Error: Enter valid row or col")
 
     def display(self) -> None:
-        for row in self.grid:
-            print(row)
+        print(self)
 
     def __str__(self):
         return '\n'.join(' '.join(row) for row in self.grid)
@@ -32,10 +31,11 @@ class Grid:
         return Grid(tree_height)
 
 
-class Postal:
+class Tree:
 
-    def __init__(self, height: int):
-        self.height = height + 2
+    def __init__(self, tree_height: int):
+        self.tree_height = tree_height + 2
+        self.grid = Grid.create_grid(tree_height)
 
     def build_top(self) -> None:
         pass
@@ -44,12 +44,10 @@ class Postal:
         pass
 
     def build_body(self) -> None:
-        for i in range(self.height):
-            stars = '*' * (2 * i + 1)
-            spaces = ' ' * (self.height - i - 1)
-
-    def get_tree(self) -> str:
         pass
+
+    def display(self):
+        self.grid.display()
 
 
 def read_height() -> int:
@@ -63,8 +61,8 @@ def read_height() -> int:
 
 def main():
     # height = read_height()
-    grid = Grid(4)
-    print(grid)
+
+    pass
 
 
 if __name__ == "__main__":
