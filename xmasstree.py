@@ -11,7 +11,7 @@ class Grid:
         for _ in range(self.height):
             row = []
             for _ in range(self.width):
-                row.append('.')
+                row.append(' ')
             self.grid.append(row)
 
     def set_value(self, i: int, j: int, value: str) -> None:
@@ -36,8 +36,9 @@ class Grid:
 
 class Tree:
 
-    def __init__(self, tree_height: int):
+    def __init__(self, tree_height: int, interval: int):
         self.tree_height = tree_height
+        self.interval = interval
         self.grid = Grid.create_grid(tree_height)
 
     def build_top(self) -> None:
@@ -65,11 +66,12 @@ class Tree:
                     self.grid.set_value(2 + k, mid + m, '*')
                     self.grid.set_value(2 + k, mid - m, '*')
 
+    def put_decorations(self):
         pass
 
     @staticmethod
-    def get_tree(height: int):
-        tree = Tree(height)
+    def get_tree(height: int, interval: int):
+        tree = Tree(height, interval)
         tree.build_top()
         tree.build_body()
         tree.build_trunk()
@@ -89,9 +91,6 @@ def read_height() -> int:
 
 
 def main():
-    # height = read_height()
-    tree = Tree.get_tree(14)
-    tree.display()
     pass
 
 
