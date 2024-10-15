@@ -1,12 +1,22 @@
 # X-Mas Tree Project
 
-def make_tree(height: int) -> None:
-    space = ' '
-    star = '*'
-    for i in range(height):
-        stars = star * (2 * i + 1)
-        spaces = space * (height - i - 1)
-        print(spaces + stars)
+class Tree:
+    def __init__(self, height: int):
+        self.height = height
+        self.tree = []
+
+    def build_top(self):
+        pass
+
+    def build_crown(self):
+        space = ' '
+        star = '*'
+        for i in range(self.height):
+            stars = star * (2 * i + 1)
+            spaces = space * (self.height - i - 1)
+
+    def build_trunk(self):
+        pass
 
 
 def read_height() -> int:
@@ -20,7 +30,7 @@ def read_height() -> int:
 
 def main():
     height = read_height()
-    make_tree(height)
+
 
 if __name__ == "__main__":
     main()
