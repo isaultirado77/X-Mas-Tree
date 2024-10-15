@@ -3,7 +3,7 @@
 class Grid:
     def __init__(self, tree_height: int):
         self.height = tree_height + 2
-        self.width = tree_height + 1 + 2
+        self.width = tree_height + 5
         self.grid = []
         self.build_gird()
 
@@ -11,7 +11,7 @@ class Grid:
         for _ in range(self.height):
             row = []
             for _ in range(self.width):
-                row.append('%')
+                row.append('.')
             self.grid.append(row)
 
     def set_value(self, i: int, j: int, value: str) -> None:
@@ -24,7 +24,10 @@ class Grid:
         print(self)
 
     def __str__(self):
-        return '\n'.join(' '.join(row) for row in self.grid)
+        return '\n'.join(''.join(row) for row in self.grid)
+
+    def get_mid(self) -> int:
+        return self.width // 2
 
     @staticmethod
     def create_grid(tree_height: int):
@@ -34,17 +37,43 @@ class Grid:
 class Tree:
 
     def __init__(self, tree_height: int):
-        self.tree_height = tree_height + 2
+        self.tree_height = tree_height
         self.grid = Grid.create_grid(tree_height)
 
     def build_top(self) -> None:
-        pass
+        mid = self.grid.get_mid()
+        self.grid.set_value(0, mid, 'X')  # Add the star
 
     def build_trunk(self) -> None:
-        pass
+        mid = self.grid.get_mid()
+        bottom = self.grid.height - 1
+        self.grid.set_value(bottom, mid - 1, '|')
+        self.grid.set_value(bottom, mid + 1, '|')
 
     def build_body(self) -> None:
+        h = self.tree_height - 1
+        mid = self.grid.get_mid()
+        # Put mid top element
+        self.grid.set_value(1, mid, '^')
+        for k in range(h):
+            for l in range(k + 1):
+                # Put sides
+                self.grid.set_value(2 + k, mid + l + 1, '\\')
+                self.grid.set_value(2 + k, mid - l - 1, '/')
+                for m in range(l + 1):
+                    # Put stars
+                    self.grid.set_value(2 + k, mid + m, '*')
+                    self.grid.set_value(2 + k, mid - m, '*')
+
         pass
+
+    @staticmethod
+    def get_tree(height: int):
+        tree = Tree(height)
+        tree.build_top()
+        tree.build_body()
+        tree.build_trunk()
+        return tree
 
     def display(self):
         self.grid.display()
@@ -61,7 +90,8 @@ def read_height() -> int:
 
 def main():
     # height = read_height()
-
+    tree = Tree.get_tree(4)
+    tree.display()
     pass
 
 
