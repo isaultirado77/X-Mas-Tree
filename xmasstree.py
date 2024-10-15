@@ -3,7 +3,7 @@
 class Grid:
     def __init__(self, tree_height: int):
         self.height = tree_height + 2
-        self.width = tree_height + 5
+        self.width = (tree_height - 1) * 2 + 1
         self.grid = []
         self.build_gird()
 
@@ -90,7 +90,7 @@ def read_height() -> int:
 
 def main():
     # height = read_height()
-    tree = Tree.get_tree(4)
+    tree = Tree.get_tree(14)
     tree.display()
     pass
 
