@@ -107,6 +107,20 @@ class Tree:
         self.grid.display()
 
 
+class Postal:
+    def __init__(self):
+        pass
+
+    def build_sides(self):
+        pass
+
+    def build_message(self):
+        pass
+
+    def place_tree(self, tree: Grid, i: int, j: int) -> None:
+        pass
+
+
 def read_inputs():
     try:
         inputs = str(input())
