@@ -144,7 +144,8 @@ class Postal:
         for l in range(h):
             for m in range(w):
                 current_tree_value = tree.get_value(l, m)
-                self.grid.set_value(i + l, j + m - mid_tree, current_tree_value)
+                if current_tree_value != ' ':
+                    self.grid.set_value(i + l, j + m - mid_tree, current_tree_value)
 
     def display(self):
         self.grid.display()
@@ -152,20 +153,45 @@ class Postal:
 
 def read_inputs():
     try:
-        inputs = str(input())
+        inputs = input()
         split_inputs = inputs.split(' ')
-
+        int_inputs = [int(x) for x in split_inputs]
+        return int_inputs
     except ValueError:
-        print("Error: Enter a number.")
-        return -1
+        print("Error: Enter valid inputs. ")
+
+
+def handle_inputs(inputs: list):
+    length = len(inputs)
+    if length == 2:
+        height, intervals = inputs[0], inputs[1]
+        tree = Tree.get_tree(height, intervals)
+        return tree
+
+    elif length % 4 == 0:
+        postal = Postal()
+        total_args = int(length / 4)
+        args = []
+
+        # Get arguments
+        for i in range(0, length, 4):
+            args.append(tuple(inputs[i:i + 4]))
+
+        # Build postal
+        for arg in args:
+            H, I, L, C = arg
+            tree = Tree.get_tree(H, I)
+            postal.place_tree(tree, L, C)
+
+        return postal
+    else:
+        print("Error: Invalid set of inputs. ")
 
 
 def main():
-    tree = Tree.get_tree(5, 2)
-    tree.display()
-    postal = Postal()
-    postal.place_tree(tree, 10, 10)
-    postal.display()
+    inputs = read_inputs()
+    grid = handle_inputs(inputs)
+    grid.display()
 
 
 if __name__ == "__main__":
