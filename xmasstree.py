@@ -27,14 +27,12 @@ class Grid:
 
     def fill_sides(self) -> None:
         for j in range(self.width):
-            self.grid[0][j] = '-'  # First row
-
-        for j in range(self.width):
-            self.grid[-1][j] = '-'  # Last row
+            self.grid[0][j] = '-'  # Top row
+            self.grid[-1][j] = '-'  # Bottom row
 
         for i in range(1, self.height - 1):
-            self.grid[i][0] = '|'
-            self.grid[i][-1] = '|'
+            self.grid[i][0] = '|'  # Left column
+            self.grid[i][-1] = '|'  # Right column
 
     def display(self) -> None:
         print(self)
@@ -44,6 +42,9 @@ class Grid:
 
     def get_mid(self) -> int:
         return self.width // 2
+
+    def get_size(self) -> tuple:
+        return self.height, self.width
 
 
 class Tree:
@@ -99,6 +100,18 @@ class Tree:
 
         return positions[::self.interval]
 
+    def get_value(self, i: int, j: int):
+        return self.grid.get_value(i, j)
+
+    def set_value(self, i: int, j: int, value: str):
+        return self.grid.set_value(i, j, value)
+
+    def get_mid(self):
+        return self.grid.get_mid()
+
+    def get_size(self):
+        return self.grid.get_size()
+
     @staticmethod
     def get_tree(height: int, interval: int):
         tree = Tree(height, interval)
@@ -117,12 +130,21 @@ class Postal:
         self.width = width
         self.grid = Grid(height, width)
         self.grid.fill_sides()
+        self.build_message()
 
-    def build_message(self):
-        pass
+    def build_message(self, msg="Merry Xmas"):
+        mid = self.grid.get_mid()
+        start_index = mid - len(msg) // 2
+        for i, char in enumerate(msg):
+            self.grid.set_value(27, start_index + i, char)
 
-    def place_tree(self, tree: Grid, i: int, j: int) -> None:
-        pass
+    def place_tree(self, tree: Tree, i: int, j: int) -> None:
+        mid_tree = tree.get_mid()
+        h, w = tree.get_size()
+        for l in range(h):
+            for m in range(w):
+                current_tree_value = tree.get_value(l, m)
+                self.grid.set_value(i + l, j + m - mid_tree, current_tree_value)
 
     def display(self):
         self.grid.display()
@@ -132,21 +154,17 @@ def read_inputs():
     try:
         inputs = str(input())
         split_inputs = inputs.split(' ')
-        if len(split_inputs) > 2:
-            print("Error: Enter a valid inputs. ")
-            return -1
-        height = int(split_inputs[0])
-        interval = int(split_inputs[1])
-        if interval < 1:
-            print("Error: Interval must be greater or equal than 1. ")
-        return height, interval
+
     except ValueError:
         print("Error: Enter a number.")
         return -1
 
 
 def main():
+    tree = Tree.get_tree(5, 2)
+    tree.display()
     postal = Postal()
+    postal.place_tree(tree, 10, 10)
     postal.display()
 
 
