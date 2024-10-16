@@ -1,19 +1,15 @@
 # X-Mas Tree Project
-from typing import Any
-
 
 class Grid:
-    def __init__(self, tree_height: int):
-        self.height = tree_height + 2
-        self.width = (tree_height - 1) * 2 + 1
+    def __init__(self, height: int, width: int):
+        self.height = height
+        self.width = width
         self.grid = []
-        self.build_gird()
+        self.build_grid()
 
-    def build_gird(self) -> None:
+    def build_grid(self) -> None:
         for _ in range(self.height):
-            row = []
-            for _ in range(self.width):
-                row.append(' ')
+            row = [' '] * self.width
             self.grid.append(row)
 
     def set_value(self, i: int, j: int, value: str) -> None:
@@ -22,12 +18,23 @@ class Grid:
         else:
             print("Error: Enter valid row or col")
 
-    def get_value(self, i: int, j: int) -> Any:
+    def get_value(self, i: int, j: int) -> str:
         if 0 <= i < self.height and 0 <= j < self.width:
             return self.grid[i][j]
         else:
             print("Error: Enter valid row or col")
-            return
+            return ''
+
+    def fill_sides(self) -> None:
+        for j in range(self.width):
+            self.grid[0][j] = '-'  # First row
+
+        for j in range(self.width):
+            self.grid[-1][j] = '-'  # Last row
+
+        for i in range(1, self.height - 1):
+            self.grid[i][0] = '|'
+            self.grid[i][-1] = '|'
 
     def display(self) -> None:
         print(self)
@@ -38,17 +45,14 @@ class Grid:
     def get_mid(self) -> int:
         return self.width // 2
 
-    @staticmethod
-    def create_grid(tree_height: int):
-        return Grid(tree_height)
-
 
 class Tree:
-
     def __init__(self, tree_height: int, interval: int):
         self.tree_height = tree_height
         self.interval = interval
-        self.grid = Grid.create_grid(tree_height)
+        height = tree_height + 2
+        width = (tree_height - 1) * 2 + 1
+        self.grid = Grid(height, width)
 
     def build_top(self) -> None:
         mid = self.grid.get_mid()
@@ -108,17 +112,20 @@ class Tree:
 
 
 class Postal:
-    def __init__(self):
-        pass
-
-    def build_sides(self):
-        pass
+    def __init__(self, height: int = 30, width: int = 50):
+        self.height = height
+        self.width = width
+        self.grid = Grid(height, width)
+        self.grid.fill_sides()
 
     def build_message(self):
         pass
 
     def place_tree(self, tree: Grid, i: int, j: int) -> None:
         pass
+
+    def display(self):
+        self.grid.display()
 
 
 def read_inputs():
@@ -139,10 +146,8 @@ def read_inputs():
 
 
 def main():
-    height, interval = read_inputs()
-    tree = Tree.get_tree(height, interval)
-    tree.display()
-    pass
+    postal = Postal()
+    postal.display()
 
 
 if __name__ == "__main__":
